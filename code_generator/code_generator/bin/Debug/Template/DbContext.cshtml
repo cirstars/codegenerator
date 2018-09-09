@@ -1,0 +1,28 @@
+﻿@using System
+@using System.Security.AccessControl
+@using RC.UI.DeveloperTools.Common
+@{
+    
+}
+namespace @Model.NameSpace
+{
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+
+    public partial class @(Model.DataBaseName)Entities : DbContext
+    {
+        public @(Model.DataBaseName)Entities()
+            : base("name=@(Model.DataBaseName)Entities")
+        {
+        }
+       @foreach (var table in @Model.Tables)
+       {
+           string temp = @"
+        public virtual DbSet<{0}> {0} {{ get; set; }}
+";
+           @Raw(string.Format(temp, table.name))
+       }
+        
+    }
+}

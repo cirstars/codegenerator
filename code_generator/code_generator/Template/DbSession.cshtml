@@ -1,0 +1,32 @@
+﻿@{
+}
+using System.Data.Common;
+using System.Data.Entity;
+using RC.Dal.EFDal;
+using RC.Dal.IDal;
+
+namespace @Model.NameSpace
+{
+    public class DbSession
+    {
+        public readonly IUnitWork UnitWork = null;
+        private readonly object _dbContext;
+        public DbSession(IUnitWork unitWork)
+        {
+            UnitWork = unitWork;
+            _dbContext = UnitWork.Db;
+        }
+
+        @foreach (var table in @Model.Tables)
+        {
+            string a = string.Format(@"
+        public I{0}Dal {0}Dal
+        {{
+            get {{ return DalFactory.Get{0}Dal(_dbContext); }}
+        }}
+
+        ", table.name);
+            @Raw(a)
+        }
+    }
+}

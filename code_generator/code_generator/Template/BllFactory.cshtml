@@ -1,0 +1,32 @@
+﻿@{
+
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RC.BLL.DirectDBBll;
+using RC.BLL.IBll;
+
+namespace @Model.NameSpace
+{
+    public class BllFactory
+    {
+        public static IBaseBll<T> GetBaseBll<T>() where T : class
+        {
+            return new BaseBll<T>();
+        }
+    @foreach (var table in @Model.Tables)
+    {
+        string a = string.Format(@"
+        public static I{0}Bll Get{0}Bll()
+        {{
+            return new {0}Bll();
+        }}
+
+        ", table.name);
+        @Raw(a)
+    }
+    }
+}

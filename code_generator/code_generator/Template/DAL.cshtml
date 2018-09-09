@@ -1,0 +1,23 @@
+﻿@{
+
+}
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RC.Dal.IDal;
+using RC.Model.DataModel;
+
+namespace @Model.NameSpace
+{
+    public class @(Model.TableInfo.name)Dal : BaseDal<@(Model.TableInfo.name)>, I@(Model.TableInfo.name)Dal
+    {
+        public @(Model.TableInfo.name)Dal(object db)
+        : base(db)
+        {
+
+        }
+    }
+}

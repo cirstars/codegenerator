@@ -1,0 +1,67 @@
+﻿@using System
+@using RC.UI.DeveloperTools.Common
+@{
+    
+}
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using RC.Model.Common;
+using RC.Common.Utilities;
+
+namespace @Model.NameSpace
+{
+    [PrimaryKey("@(Model.TableInfo.pk)")]
+    //[Module(typeof(@(Model.DataBaseName)Entities))]
+    public partial class @Model.TableInfo.name : BaseEntity
+    {
+        @foreach (TableColums col in @Model.Colums)
+        {
+            string attribute = @"";
+string tr = @"
+        [DisplayText(""{2}"")]
+        public {0} {1} {{ get; set; }}";
+            string pos0 = "";
+            if (col.isnullable == "√" && FieldCommon.IsNullableType(col.datatype))
+            {
+                pos0 = string.Format("Nullable<{0}>", FieldCommon.GetCShareType(col.datatype));
+            }
+            else
+            {
+                pos0 = string.Format("{0}", FieldCommon.GetCShareType(col.datatype));
+            }
+                    
+            if (FieldCommon.IsString(col.datatype))
+            {
+                int length = FieldCommon.GetMaxLength(col.datatype, Convert.ToInt32(col.length));
+tr = @"        
+        [MaxLength(" + length.ToString() + ")]" + tr;
+            }
+
+            if (col.key == "√")
+            {
+tr = @"
+        [Key]" + tr;
+            }
+            
+            string pos1 = "";
+            pos1 = col.column;
+            if (!string.IsNullOrWhiteSpace(col.remark))
+            {
+tr = @"
+        /// <summary>
+        /// " + col.remark + @"
+        /// </summary>" + tr;
+            }      
+@Raw(string.Format(tr, pos0, pos1, col.remark))
+
+        }
+
+@Raw(@"
+    }
+")
+}
